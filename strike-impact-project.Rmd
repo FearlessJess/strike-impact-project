@@ -1,0 +1,39 @@
+---
+title: "strike-impact-project"
+author: "Kehan Liu"
+date: "27/04/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(dplyr)
+library(readr)
+library(ggplot2)
+library(knitr)
+library(psych)
+
+options(scipen = 999)
+
+likert_levels <- c(
+  "Strongly disagree", 
+  "Disagree", 
+  "Neither agree nor disagree", 
+  "Agree", 
+  "Strongly agree") 
+
+d_strike_impact <- read_csv(
+  '../data/Survey.csv',
+  col_types = cols(
+    col_character(),
+    col_factor(),
+    col_number(),
+    col_number(),
+    col_factor(ordered = TRUE, levels = likert_levels),
+    col_factor(ordered = TRUE, levels = likert_levels),
+    col_factor(ordered = TRUE, levels = likert_levels),
+    col_factor(ordered = TRUE, levels = likert_levels),
+    col_character()
+  ))
+```
