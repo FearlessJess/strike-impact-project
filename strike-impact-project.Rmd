@@ -36,4 +36,37 @@ d_strike_impact <- read_csv(
     col_factor(ordered = TRUE, levels = likert_levels),
     col_character()
   ))
+
+d_strike_impact <- d_strike_impact %>%
+  mutate(
+    across(
+      .cols = c(starts_with('learn'), 'forget_knowledge', 'admin_impact'),
+      .fns = as.numeric,
+      .names = '{.col}_coded'
+    )
+  )
+
+keys_list <- list(
+  strike_attitude = c(
+    'learn_interest_coded',
+    'learn_pressure_coded',
+    'forget_knowledge_coded',
+    'admin_impact_coded'
+  )
+)
+
+strike_impact_scores <- scoreItems(
+  keys = keys_list,
+  items = d_strike_impact,
+  totals = FALSE,
+  missing = TRUE, 
+  impute = 'none'
+)
+
+d_strike_impact <- cbind(d_strike_impact, strike_impact_scores$scores)
+
 ```
+
+
+
+
