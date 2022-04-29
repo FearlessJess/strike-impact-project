@@ -46,6 +46,11 @@ d_strike_impact <- d_strike_impact %>%
     )
   )
 
+d_strike_impact <- d_strike_impact %>%
+  mutate(
+    impact_mod_percent = round(impact_mod/total_mod*100)
+  )
+
 keys_list <- list(
   strike_attitude = c(
     'learn_interest_coded',
