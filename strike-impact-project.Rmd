@@ -73,5 +73,36 @@ d_strike_impact <- cbind(d_strike_impact, strike_impact_scores$scores)
 ```
 
 
+```{r}
+d_strike_impact <- d_strike_impact %>%
+  mutate(
+    Not_Positive = overall_performance != 'Positive'
+  )
+
+d_not_positive <- d_strike_impact %>%
+  group_by(faculty) %>%
+  summarise(
+    n = n(),
+    n_not_pos = sum(Not_Positive, na.rm = TRUE)
+  ) %>%
+  mutate(
+    Percentage = round(n_not_pos / n * 100)
+  ) %>%
+  tibble()
+
+d_not_positive
+
+fisher.test(
+  d_strike_impact$faculty,
+  d_strike_impact$Not_Positive
+)
+
+```
+
+
+
+
+
+
 
 
