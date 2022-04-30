@@ -80,6 +80,28 @@ d_strike_impact <- cbind(d_strike_impact, strike_impact_scores$scores)
 
 
 ```{r}
+impact_likert_summary <- d_strike_impact %>%
+  select(ends_with('_coded')) %>%
+  lapply(
+    median, na.rm = TRUE
+  )
+
+d_impact_likert_summary <- tibble(
+  Item = impact_likert_summary %>% names,
+  Median = impact_likert_summary %>% unlist
+)
+
+d_impact_likert_summary
+
+d_impact_likert_summary %>%
+  ggplot(
+    aes(x = Item, y = Median)
+  ) +
+  geom_point()
+```
+
+
+```{r}
 d_strike_impact <- d_strike_impact %>%
   mutate(
     Not_Positive = overall_performance != 'Positive'
@@ -104,6 +126,15 @@ fisher.test(
 )
 
 ```
+
+```{r}
+d_strike_impact %>%
+  ggplot(aes(x = impact_mod_prop, y = strike_attitude, color = deg_lev)) +
+  geom_jitter(alpha = 0.7) +
+  geom_smooth(method = lm, se = FALSE, fullrange = TRUE, aes(color = deg_lev))
+
+```
+
 
 ```{r}
 d_strike_impact <- d_strike_impact %>%
