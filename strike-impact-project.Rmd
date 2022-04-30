@@ -13,6 +13,7 @@ library(readr)
 library(ggplot2)
 library(knitr)
 library(psych)
+library(naniar)
 
 options(scipen = 999)
 
@@ -23,11 +24,16 @@ likert_levels <- c(
   "Agree", 
   "Strongly agree") 
 
+degree_levels <- c(
+  "Undergraduate",
+  "Postgraduate"
+)
+
 d_strike_impact <- read_csv(
   '../data/Survey.csv',
   col_types = cols(
     col_character(),
-    col_factor(),
+    col_factor(ordered = FALSE, levels = degree_levels),
     col_number(),
     col_number(),
     col_factor(ordered = TRUE, levels = likert_levels),
@@ -48,7 +54,7 @@ d_strike_impact <- d_strike_impact %>%
 
 d_strike_impact <- d_strike_impact %>%
   mutate(
-    impact_mod_percent = round(impact_mod/total_mod*100)
+    impact_mod_prop = round(impact_mod/total_mod, digits = 2)
   )
 
 keys_list <- list(
@@ -99,7 +105,19 @@ fisher.test(
 
 ```
 
+```{r}
+d_strike_impact <- d_strike_impact %>%
+  mutate(
+    Posgrad = deg_lev == 'Postgraduate'
+  ) %>%
+  replace_with_na(replace = list(impact_mod_prop = 5))
 
+d_strike_impact %>%
+  mutate(Posgrad = Posgrad %>% as.numeric) %>%
+  lm(strike_attitude ~ impact_mod_prop + Posgrad, data = ., na.action = na.exclude) %>%
+  summary
+
+```
 
 
 
