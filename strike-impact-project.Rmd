@@ -104,25 +104,25 @@ d_impact_likert_summary %>%
 ```{r}
 d_strike_impact <- d_strike_impact %>%
   mutate(
-    Not_Positive = overall_performance != 'Positive'
+    Negative = overall_performance == 'Negative'
   )
 
-d_not_positive <- d_strike_impact %>%
+d_negative <- d_strike_impact %>%
   group_by(faculty) %>%
   summarise(
     n = n(),
-    n_not_pos = sum(Not_Positive, na.rm = TRUE)
+    n_neg = sum(Negative, na.rm = TRUE)
   ) %>%
   mutate(
-    Percentage = round(n_not_pos / n * 100)
+    Percentage = round(n_neg / n * 100)
   ) %>%
   tibble()
 
-d_not_positive
+d_negative
 
 fisher.test(
   d_strike_impact$faculty,
-  d_strike_impact$Not_Positive
+  d_strike_impact$Negative
 )
 
 ```
