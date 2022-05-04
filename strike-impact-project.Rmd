@@ -78,6 +78,45 @@ d_strike_impact <- cbind(d_strike_impact, strike_impact_scores$scores)
 
 ```
 
+```{r}
+d_strike_impact %>%
+  count(faculty)
+
+d_strike_impact %>%
+  ggplot(aes(x=faculty)) +
+  geom_bar() +
+  coord_flip()
+```
+```{r}
+d_strike_impact %>%
+  count(deg_lev)
+
+d_strike_impact %>%
+  ggplot(aes(x=deg_lev)) +
+  geom_bar()
+```
+```{r}
+d_strike_impact %>%
+  summarise(
+    n = n(),
+    M = mean(impact_mod_prop) %>% round(digits = 2),
+    SD = sd(impact_mod_prop) %>% round(digits = 2)
+  )
+
+d_strike_impact %>%
+  ggplot(aes(x = impact_mod_prop)) +
+  geom_histogram(binwidth = 0.2)
+
+```
+```{r}
+d_strike_impact %>%
+  count(overall_performance)
+
+d_strike_impact %>%
+  ggplot(aes(x = overall_performance)) +
+  geom_bar()
+
+```
 
 ```{r}
 impact_likert_summary <- d_strike_impact %>%
